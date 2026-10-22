@@ -1183,6 +1183,141 @@
   filter: drop-shadow(0 2px 2px rgba(40, 28, 12, 0.35));
 }
 
+/* Pencil service: the pencil drops onto a hub, winds the reels, and leaves. */
+.bench-preview.servicing {
+  cursor: progress;
+}
+
+.bench-preview.servicing:hover {
+  transform: none;
+}
+
+.bench-preview.servicing .cassette {
+  --spin-state: running !important;
+  --spin-duration: 0.58s !important;
+  box-shadow:
+    0 0 0 2px rgba(176, 118, 54, 0.55),
+    0 18px 34px -18px rgba(0, 0, 0, 0.6);
+}
+
+.bench-preview.servicing .hub.spinning {
+  animation-direction: reverse;
+}
+
+.bench-preview.service-retension .hub.spinning {
+  animation-direction: normal;
+}
+
+.bench-service {
+  position: absolute;
+  left: 76%;
+  top: 72%;
+  width: 0;
+  height: 0;
+  z-index: 8;
+  pointer-events: none;
+}
+
+.bench-preview.service-rewind .bench-service {
+  left: 24%;
+}
+
+.bench-service-ring {
+  position: absolute;
+  left: -34px;
+  top: -34px;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 238, 205, 0.7);
+  box-shadow:
+    0 0 0 1px rgba(120, 78, 30, 0.22),
+    0 0 20px rgba(255, 196, 110, 0.28);
+  animation: bench-service-ring 1.5s linear both;
+}
+
+.bench-service-pencil {
+  position: absolute;
+  left: -5px;
+  bottom: -2px;
+  width: 10px;
+  height: 62px;
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 4px 4px rgba(28, 18, 8, 0.4));
+  animation: bench-pencil-wind 1.5s cubic-bezier(0.4, 0.05, 0.25, 1) both;
+}
+
+.bench-service-pencil::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 10px;
+  height: 52px;
+  border-radius: 3px 3px 0 0;
+  background:
+    linear-gradient(180deg, #d98d86 0 7px, #b8b3a8 7px 10px, transparent 10px),
+    linear-gradient(90deg, #7d4b16 0%, #c98c2f 20%, #f6cd70 45%, #daa03a 64%, #7a4a15 100%);
+}
+
+.bench-service-pencil::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 12px solid #d8b27b;
+  filter: drop-shadow(0 1px 0 #6b4a22);
+}
+
+.bench-service-pencil i {
+  position: absolute;
+  left: 4px;
+  bottom: 0;
+  width: 2px;
+  height: 5px;
+  border-radius: 0 0 1px 1px;
+  background: linear-gradient(180deg, #6a6158, #181410);
+}
+
+@keyframes bench-service-ring {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) rotate(0deg);
+  }
+  15% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.08) rotate(220deg);
+  }
+}
+
+@keyframes bench-pencil-wind {
+  0% {
+    opacity: 0;
+    transform: rotate(-26deg) scale(0.72);
+  }
+  12% {
+    opacity: 1;
+    transform: rotate(-26deg) scale(1);
+  }
+  76% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(694deg) scale(1);
+  }
+}
+
 .bench-comment {
   margin: 10px 0 4px;
   text-align: center;
@@ -1281,3 +1416,322 @@
     display: none;
   }
 }
+
+/* Light finishes need dark ink on the window foot and side controls; those
+   pieces are intentionally pale on the dark decks. */
+[data-skin="fm8-classic"] .deck[data-finish="1"] .tape-window-foot,
+[data-skin="fc8-clear"] .deck[data-finish="1"] .tape-window-foot,
+[data-skin="fz90-glass"] .deck[data-finish="1"] .tape-window-foot,
+[data-skin="fx85-mirror"] .deck[data-finish="1"] .tape-window-foot,
+[data-skin="fd84-pro"] .deck[data-finish="1"] .tape-window-foot {
+  color: color-mix(in srgb, var(--deck-text) 68%, transparent);
+}
+
+[data-skin="fm8-classic"] .deck[data-finish="1"] .side-pill,
+[data-skin="fc8-clear"] .deck[data-finish="1"] .side-pill,
+[data-skin="fz90-glass"] .deck[data-finish="1"] .side-pill,
+[data-skin="fx85-mirror"] .deck[data-finish="1"] .side-pill,
+[data-skin="fd84-pro"] .deck[data-finish="1"] .side-pill {
+  color: color-mix(in srgb, var(--accent) 72%, #000);
+  background: rgba(0, 0, 0, 0.055);
+}
+
+[data-skin="fm8-classic"] .deck[data-finish="1"] .eject-btn,
+[data-skin="fc8-clear"] .deck[data-finish="1"] .eject-btn,
+[data-skin="fz90-glass"] .deck[data-finish="1"] .eject-btn,
+[data-skin="fx85-mirror"] .deck[data-finish="1"] .eject-btn,
+[data-skin="fd84-pro"] .deck[data-finish="1"] .eject-btn {
+  color: color-mix(in srgb, var(--deck-text) 72%, transparent);
+  background: rgba(0, 0, 0, 0.055);
+}
+
+[data-skin="fm8-classic"] .deck[data-finish="1"] .eject-btn:hover,
+[data-skin="fc8-clear"] .deck[data-finish="1"] .eject-btn:hover,
+[data-skin="fz90-glass"] .deck[data-finish="1"] .eject-btn:hover,
+[data-skin="fx85-mirror"] .deck[data-finish="1"] .eject-btn:hover,
+[data-skin="fd84-pro"] .deck[data-finish="1"] .eject-btn:hover {
+  color: var(--deck-text);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+[data-skin="fm8-classic"] .deck[data-finish="1"] .eject-btn.lit,
+[data-skin="fc8-clear"] .deck[data-finish="1"] .eject-btn.lit,
+[data-skin="fz90-glass"] .deck[data-finish="1"] .eject-btn.lit,
+[data-skin="fx85-mirror"] .deck[data-finish="1"] .eject-btn.lit,
+[data-skin="fd84-pro"] .deck[data-finish="1"] .eject-btn.lit {
+  color: color-mix(in srgb, var(--accent) 78%, #000);
+}
+
+[data-skin="fm8-classic"] .deck[data-finish="1"] .deck-readout .now .s,
+[data-skin="fc8-clear"] .deck[data-finish="1"] .deck-readout .now .s,
+[data-skin="fz90-glass"] .deck[data-finish="1"] .deck-readout .now .s,
+[data-skin="fx85-mirror"] .deck[data-finish="1"] .deck-readout .now .s,
+[data-skin="fd84-pro"] .deck[data-finish="1"] .deck-readout .now .s {
+  opacity: 0.68;
+}
+
+[data-skin="fm8-classic"] .deck[data-finish="1"] .rail-times,
+[data-skin="fc8-clear"] .deck[data-finish="1"] .rail-times,
+[data-skin="fz90-glass"] .deck[data-finish="1"] .rail-times,
+[data-skin="fx85-mirror"] .deck[data-finish="1"] .rail-times,
+[data-skin="fd84-pro"] .deck[data-finish="1"] .rail-times {
+  opacity: 0.64;
+}
+
+[data-skin="fm8-classic"] .deck[data-finish="1"] .deck-badges,
+[data-skin="fc8-clear"] .deck[data-finish="1"] .deck-badges,
+[data-skin="fz90-glass"] .deck[data-finish="1"] .deck-badges,
+[data-skin="fx85-mirror"] .deck[data-finish="1"] .deck-badges,
+[data-skin="fd84-pro"] .deck[data-finish="1"] .deck-badges {
+  opacity: 0.78;
+}
+
+[data-skin="fm8-classic"] .deck[data-finish="1"] .deck-wordmark span,
+[data-skin="fc8-clear"] .deck[data-finish="1"] .deck-wordmark span,
+[data-skin="fz90-glass"] .deck[data-finish="1"] .deck-wordmark span,
+[data-skin="fx85-mirror"] .deck[data-finish="1"] .deck-wordmark span,
+[data-skin="fd84-pro"] .deck[data-finish="1"] .deck-wordmark span {
+  opacity: 0.7;
+}
+
+/* --- deck finishes -------------------------------------------------------
+   Every deck has a second, real material. The finish lives on the deck so
+   the keys, window, readout and labels all pick up the new palette. */
+
+.deck[data-finish="1"] {
+  transition:
+    background 320ms ease,
+    color 320ms ease,
+    box-shadow 320ms ease,
+    border-color 320ms ease;
+}
+
+/* FM-8 Classic - the brushed silver turns into a warm, flat matte. */
+[data-skin="fm8-classic"] .deck[data-finish="1"] {
+  --deck-body: #c9c4ba;
+  --deck-body-2: #aaa59b;
+  --deck-edge: #7e7970;
+  --deck-muted: #5a554d;
+  --metal: #d7d2c9;
+  background-image: linear-gradient(168deg, var(--deck-body) 0%, var(--deck-body-2) 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.34) inset,
+    0 -2px 0 rgba(0, 0, 0, 0.16) inset,
+    0 18px 36px -18px rgba(40, 30, 18, 0.36),
+    0 2px 8px rgba(40, 30, 18, 0.12);
+}
+
+/* FC-8 Clear - crystal glass becomes a milky, softly frosted pane. */
+[data-skin="fc8-clear"] .deck[data-finish="1"] {
+  --deck-body: rgba(234, 242, 247, 0.7);
+  --deck-body-2: rgba(199, 217, 227, 0.64);
+  --deck-edge: rgba(157, 183, 197, 0.8);
+  --deck-muted: #566e7a;
+  --key-bg: rgba(175, 195, 208, 0.78);
+  --key-bg-2: rgba(146, 171, 186, 0.78);
+  --window-bg: rgba(220, 234, 242, 0.42);
+  --metal: #f4f8fb;
+  background-image:
+    radial-gradient(ellipse at 22% 0%, rgba(255, 255, 255, 0.62), transparent 58%),
+    linear-gradient(168deg, rgba(255, 255, 255, 0.24), rgba(207, 227, 237, 0.1)),
+    linear-gradient(168deg, var(--deck-body) 0%, var(--deck-body-2) 100%);
+  backdrop-filter: blur(22px) saturate(0.78);
+}
+
+/* FX-79 Original - poster blue, but in a flatter satin. */
+[data-skin="fx79-original"] .deck[data-finish="1"] {
+  --deck-body: #2a608f;
+  --deck-body-2: #1a4164;
+  --deck-edge: #0f2a40;
+  --deck-text: #edf5fb;
+  --deck-muted: #aac5d9;
+  --key-bg: #183650;
+  --key-bg-2: #0e2638;
+  --metal: #afc7da;
+  background-image:
+    linear-gradient(112deg, rgba(255, 255, 255, 0.07) 0 17%, transparent 17% 52%, rgba(255, 255, 255, 0.04) 52% 74%, transparent 74%),
+    linear-gradient(168deg, var(--deck-body) 0%, var(--deck-body-2) 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.3) inset,
+    0 -2px 0 rgba(0, 0, 0, 0.2) inset,
+    0 18px 38px -18px rgba(8, 20, 32, 0.55);
+}
+
+/* FZ-90 Glass - black glass with a white glass twin. */
+[data-skin="fz90-glass"] .deck[data-finish="1"] {
+  --deck-body: rgba(246, 249, 251, 0.92);
+  --deck-body-2: rgba(214, 227, 234, 0.94);
+  --deck-edge: rgba(255, 255, 255, 0.9);
+  --deck-text: #25313a;
+  --deck-muted: #62727e;
+  --key-bg: rgba(226, 235, 241, 0.98);
+  --key-bg-2: rgba(198, 212, 221, 0.98);
+  --key-text: #24313a;
+  --key-edge: rgba(147, 172, 187, 0.7);
+  --window-bg: rgba(226, 236, 242, 0.6);
+  --accent: #3d8fb8;
+  --accent-2: #7cc6e0;
+  --metal: rgba(255, 255, 255, 0.85);
+  color-scheme: light;
+  background-image:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.55) 0 22%, rgba(255, 255, 255, 0.12) 22% 42%, transparent 42% 64%, rgba(255, 255, 255, 0.3) 64% 70%, transparent 70%),
+    linear-gradient(168deg, var(--deck-body) 0%, var(--deck-body-2) 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.55) inset,
+    0 30px 60px -22px rgba(52, 72, 86, 0.38);
+}
+
+/* FH-80 Hi-Fi - brushed aluminium goes graphite. */
+[data-skin="fh80-hifi"] .deck[data-finish="1"] {
+  --deck-body: #4c5056;
+  --deck-body-2: #32363b;
+  --deck-edge: #1f2226;
+  --deck-text: #e9ecef;
+  --deck-muted: #aab2b9;
+  --key-bg: #23262a;
+  --key-bg-2: #141619;
+  --key-text: #e7eaed;
+  --key-edge: #0c0e10;
+  --window-bg: #171a1d;
+  --metal: #a9afb6;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.045) 0 1px, rgba(0, 0, 0, 0.055) 1px 2px),
+    linear-gradient(168deg, var(--deck-body) 0%, var(--deck-body-2) 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 -2px 0 rgba(0, 0, 0, 0.32) inset,
+    0 26px 52px -20px rgba(10, 14, 18, 0.6);
+}
+
+/* FX-85 Mirror - smoked lid flips to bright chrome. */
+[data-skin="fx85-mirror"] .deck[data-finish="1"] {
+  --deck-body: #d8dee4;
+  --deck-body-2: #aab3bc;
+  --deck-edge: #7c8791;
+  --deck-text: #1c2329;
+  --deck-muted: #55616b;
+  --key-bg: #c2cad1;
+  --key-bg-2: #99a3ac;
+  --key-text: #161c21;
+  --key-edge: #737e88;
+  --window-bg: #1a2026;
+  --accent: #5e7688;
+  --accent-2: #d9e8f2;
+  --metal: #f3f7fa;
+  color-scheme: light;
+  background-image: linear-gradient(
+    135deg,
+    #f8fbfd 0%,
+    #c6cfd7 22%,
+    #eef4f8 38%,
+    #a1acb6 56%,
+    #dfe7ed 74%,
+    #b0bac3 100%
+  );
+  backdrop-filter: none;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 -2px 0 rgba(0, 0, 0, 0.16) inset,
+    0 30px 60px -22px rgba(36, 46, 56, 0.4);
+}
+
+/* FA-82 Car - dash black with a walnut fascia. */
+[data-skin="fa82-car"] .deck[data-finish="1"] {
+  --deck-body: #6b4326;
+  --deck-body-2: #3c2515;
+  --deck-edge: #24150b;
+  --deck-text: #f4e8d6;
+  --deck-muted: #cdb08f;
+  --key-bg: #2f1e12;
+  --key-bg-2: #1c1008;
+  --key-text: #f1e5d2;
+  --key-edge: #0d0804;
+  --window-bg: #120d08;
+  --accent: #35ff8b;
+  --accent-2: #8dffbe;
+  --lcd-bg: #06140c;
+  --lcd-text: #4dffa0;
+  --metal: #8d6c4d;
+  color-scheme: dark;
+  background-image:
+    repeating-linear-gradient(94deg, rgba(255, 226, 190, 0.08) 0 2px, rgba(0, 0, 0, 0.13) 2px 5px, rgba(255, 210, 160, 0.04) 5px 9px),
+    linear-gradient(168deg, var(--deck-body) 0%, var(--deck-body-2) 100%);
+  border-color: #2b190d;
+  box-shadow:
+    0 1px 0 rgba(255, 230, 200, 0.18) inset,
+    0 -2px 0 rgba(0, 0, 0, 0.4) inset,
+    0 26px 52px -20px rgba(20, 10, 4, 0.65);
+}
+
+/* FJ-88 Boombox - the silver box gets its red twin. */
+[data-skin="fj88-boombox"] .deck[data-finish="1"] {
+  --deck-body: #d83c3c;
+  --deck-body-2: #a11f25;
+  --deck-edge: #701218;
+  --deck-text: #fff4ea;
+  --deck-muted: #f2c9c2;
+  --key-bg: #3b2022;
+  --key-bg-2: #241315;
+  --key-text: #ffe9df;
+  --key-edge: #1a0c0d;
+  --window-bg: #2a1618;
+  --accent: #ffd24a;
+  --accent-2: #fff0a3;
+  --metal: #f6dfd2;
+  background-image:
+    linear-gradient(112deg, rgba(255, 255, 255, 0.16) 0 12%, transparent 12% 44%, rgba(255, 255, 255, 0.08) 44% 52%, transparent 52% 100%),
+    linear-gradient(168deg, var(--deck-body) 0%, var(--deck-body-2) 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.3) inset,
+    0 -2px 0 rgba(0, 0, 0, 0.24) inset,
+    0 26px 52px -20px rgba(74, 12, 16, 0.55);
+}
+
+/* FD-84 Pro - rack black becomes a pale studio grey. */
+[data-skin="fd84-pro"] .deck[data-finish="1"] {
+  --deck-body: #b9bec4;
+  --deck-body-2: #8c939a;
+  --deck-edge: #646a70;
+  --deck-text: #1c2024;
+  --deck-muted: #51575d;
+  --key-bg: #3a3f45;
+  --key-bg-2: #23272b;
+  --key-text: #f0f2f4;
+  --key-edge: #111315;
+  --window-bg: #1a1d21;
+  --accent: #e13a3a;
+  --accent-2: #ff9b5c;
+  --metal: #d6dade;
+  color-scheme: light;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 3px),
+    linear-gradient(168deg, var(--deck-body) 0%, var(--deck-body-2) 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.55) inset,
+    0 -2px 0 rgba(0, 0, 0, 0.18) inset,
+    0 24px 46px -20px rgba(40, 44, 50, 0.4);
+}
+
+/* FK-84 Stealth - matte becomes a softer, rubberised black. */
+[data-skin="fk84-stealth"] .deck[data-finish="1"] {
+  --deck-body: #1b1d20;
+  --deck-body-2: #111214;
+  --deck-edge: #050506;
+  --deck-text: #dfe3e6;
+  --deck-muted: #8a9198;
+  --key-bg: #24272b;
+  --key-bg-2: #16181b;
+  --key-text: #d3d9de;
+  --key-edge: #000000;
+  --window-bg: #08090a;
+  --metal: #4a4f55;
+  background-image:
+    radial-gradient(ellipse at 28% 0%, rgba(255, 255, 255, 0.07), transparent 58%),
+    linear-gradient(168deg, var(--deck-body) 0%, var(--deck-body-2) 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.12) inset,
+    0 -2px 0 rgba(0, 0, 0, 0.5) inset,
+    0 22px 46px -18px rgba(0, 0, 0, 0.58);
+}
+

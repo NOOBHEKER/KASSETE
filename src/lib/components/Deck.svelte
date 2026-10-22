@@ -46,7 +46,7 @@
 </script>
 
 <div class="deck-stage">
-  <div class="deck">
+  <div class="deck" data-finish={foldman.settings.current_finish}>
     <div class="deck-head">
       <div class="deck-wordmark">
         {skin.model}

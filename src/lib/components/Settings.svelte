@@ -250,7 +250,7 @@
             <button
               class="skin-card"
               class:active={foldman.settings.current_skin === deck.id}
-              onclick={() => void foldman.setSkin(deck.id, 0)}
+              onclick={() => void foldman.setSkin(deck.id)}
             >
               <div class="skin-swatch" style:background={deck.swatch}></div>
               <div class="nm" style:color={foldman.settings.current_skin === deck.id ? '#233' : undefined}>
@@ -268,7 +268,10 @@
               <button
                 class="pill"
                 class:on={foldman.settings.current_finish === index}
-                onclick={() => void foldman.patchSettings({ current_finish: index })}
+                onclick={() => {
+                  void foldman.patchSettings({ current_finish: index });
+                  foldman.toast(`Finish: ${finish}`);
+                }}
               >
                 {finish}
               </button>
@@ -304,7 +307,7 @@
       <div class="section" style="margin-bottom:0">
         <h3>About</h3>
         <p class="hint">
-          KASSETE {info?.version ?? '1.0.1'} · built with Tauri, Svelte and a lot of affection for
+          KASSETE {info?.version ?? '1.0.2'} · built with Tauri, Svelte and a lot of affection for
           plastic. Your music stays on your disk. No accounts, no streaming, no telemetry.
         </p>
       </div>

@@ -54,11 +54,14 @@ if (typeof location !== 'undefined' && location.search.includes('probe=eject')) 
 
 // Dev helper: ?sheet=now|insights|skins opens a sheet on load, and ?shell=D
 // swaps the current tape to a clear shell so the X-ray layer can be checked.
-if (typeof location !== 'undefined' && /[?&](sheet|shell|grime)=/.test(location.search)) {
+// ?skin=fj88-boombox&finish=1 previews a deck material without the picker.
+if (typeof location !== 'undefined' && /[?&](sheet|shell|grime|skin|finish)=/.test(location.search)) {
   const params = new URLSearchParams(location.search);
   const sheet = params.get('sheet');
   const shell = params.get('shell');
   const grime = params.get('grime');
+  const skin = params.get('skin');
+  const finish = params.get('finish');
   void import('./lib/store.svelte').then(({ foldman }) => {
     setTimeout(() => {
       const tape = foldman.tape;
@@ -70,8 +73,31 @@ if (typeof location !== 'undefined' && /[?&](sheet|shell|grime)=/.test(location.
           tape.wear = Math.min(1, Math.max(0, value * 0.8));
         }
       }
+      const finishIndex = finish === null ? undefined : Number(finish);
+      if (skin) {
+        void foldman.patchSettings({
+          current_skin: skin,
+          ...(finishIndex !== undefined && Number.isFinite(finishIndex)
+            ? { current_finish: Math.max(0, Math.floor(finishIndex)) }
+            : {}),
+        });
+      } else if (finishIndex !== undefined && Number.isFinite(finishIndex)) {
+        void foldman.patchSettings({ current_finish: Math.max(0, Math.floor(finishIndex)) });
+      }
       if (sheet) foldman.openSheet(sheet as never);
     }, 500);
+  });
+}
+
+// Dev helper: ?probe=service opens the bench and starts a pencil re-tension so
+// the service animation can be caught mid-turn in a screenshot.
+if (typeof location !== 'undefined' && location.search.includes('probe=service')) {
+  void import('./lib/store.svelte').then(({ foldman }) => {
+    setTimeout(() => foldman.openSheet('bench'), 600);
+    setTimeout(() => {
+      const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.sheet button'));
+      buttons.find((button) => button.textContent?.includes('Re-tension'))?.click();
+    }, 1300);
   });
 }
 

@@ -18,7 +18,7 @@ param(
   [string]$IdentityName = 'Kassete.CassetteDeck',
   [string]$Publisher = 'CN=KASSETE',
   [string]$DisplayName = 'KASSETE',
-  [string]$Version = '1.0.1.0',
+  [string]$Version = '1.0.2.0',
   [string]$Architecture = 'x64'
 )
 

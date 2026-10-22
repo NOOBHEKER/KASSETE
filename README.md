@@ -26,11 +26,23 @@ It is not a music player with a retro skin. It is a small, complete cassette wor
 
 ---
 
+## What's new in 1.0.2
+
+- **Both finishes are real now.** Pick the second finish on any deck and the whole
+  player changes material: the FJ-88 turns red, the FZ-90 goes white glass, the
+  FH-80 goes graphite, the FA-82 gets walnut, and the rest follow suit. Keys,
+  print, window trim and readout all move with the finish.
+- **The pencil does the service.** *Re-tension* and *Wind to the start* on the
+  Bench now send a pencil into the hub, spin the reels, and wind the tape before
+  the animation fades out. The deck pauses while the pencil works.
+
+---
+
 ## Install
 
 ### Windows installer (recommended)
 
-1. Grab **`KASSETE_1.0.1_x64-setup.exe`** from the [latest release](https://github.com/NOOBHEKER/KASSETE/releases/latest).
+1. Grab **`KASSETE_1.0.2_x64-setup.exe`** from the [latest release](https://github.com/NOOBHEKER/KASSETE/releases/latest).
 2. Run it. KASSETE installs into your user profile and adds a Desktop and Start Menu
    shortcut — click the cassette icon and it opens, exactly like any other app.
 
@@ -64,7 +76,8 @@ The [docs](docs/) folder is that build, so the demo ships in the repository itse
 - Two layouts that hinge open like a real player: **cover** and **inner**;
   *Auto* switches as the window narrows.
 - Ten decks, from the silver FM-8 Classic to the neon FX-79 Original, each with
-  brushed / matte / crystal finishes.
+  two real materials - brushed or matte, crystal or frosted, silver or red - that
+  change the body, keys, print and readout together.
 - Five cassette shells — Cream, Smoked, Frosted blue, Clear, Black — plus label
   styles (typewriter, handwriting, printed, marker) and ink colours.
 - Physical controls: transport keys with real travel, a volume knob that follows
@@ -83,7 +96,8 @@ The [docs](docs/) folder is that build, so the demo ships in the repository itse
   go from *Fresh from the shop* to *Played to death* on their own.
 - Open the **Bench** with the pencil at the bottom of the window, then drag across
   the hubs to wind the tape by hand. Wind too hard and it stretches - the
-  **Bench** also cleans, re-tensions and restores a tired tape.
+  **Bench** also cleans, re-tensions and rewinds. For re-tension and wind-to-start,
+  a pencil drops into the hub and turns the reels while the tape is packed.
 
 **Now playing & insight**
 - A full Now Playing screen: big cassette, scrub bar, transport, side queue.

@@ -30,7 +30,7 @@
           <button
             class="skin-card"
             class:active={foldman.settings.current_skin === deck.id}
-            onclick={() => void foldman.setSkin(deck.id, 0)}
+            onclick={() => void foldman.setSkin(deck.id)}
           >
             <div class="skin-swatch" style:background={deck.swatch}></div>
             <div class="nm">{deck.name}</div>
@@ -46,7 +46,10 @@
             <button
               class="pill"
               class:on={foldman.settings.current_finish === index}
-              onclick={() => void foldman.patchSettings({ current_finish: index })}
+              onclick={() => {
+                void foldman.patchSettings({ current_finish: index });
+                foldman.toast(`Finish: ${finish}`);
+              }}
             >
               {finish}
             </button>

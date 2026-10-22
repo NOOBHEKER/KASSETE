@@ -13,9 +13,35 @@
   let pencil = $state({ x: 0, y: 0 });
   let windStart = { x: 0, progress: 0 };
 
+  type ServiceMode = 'rewind' | 'retension';
+  let service = $state<ServiceMode | null>(null);
+  let serviceProgress = $state<number | null>(null);
+  const previewProgress = $derived(serviceProgress ?? foldman.tapeProgress);
+  const serviceLabel = $derived(
+    service === 'rewind' ? 'Pencil rewinding the tape' : service === 'retension' ? 'Pencil re-tensioning the tape' : '',
+  );
+
   function touch() {
     if (!tape) return;
     void foldman.saveTape($state.snapshot(tape) as any);
+  }
+
+  function animateService(duration: number, step: (t: number) => void): Promise<void> {
+    if (foldman.settings.reduce_motion) {
+      step(1);
+      return Promise.resolve();
+    }
+    return new Promise((resolve) => {
+      const started = performance.now();
+      const frame = (now: number) => {
+        const raw = Math.min(1, (now - started) / duration);
+        const eased = 1 - Math.pow(1 - raw, 3);
+        step(eased);
+        if (raw < 1) requestAnimationFrame(frame);
+        else resolve();
+      };
+      requestAnimationFrame(frame);
+    });
   }
 
   function wipe() {
@@ -26,23 +52,41 @@
     foldman.toast('Heads cleaned — the tape sounds brighter already');
   }
 
-  function rewind() {
-    if (!tape) return;
+  async function rewind() {
+    if (!tape || service) return;
+    if (foldman.playing) foldman.pause();
+    service = 'rewind';
+    const from = foldman.tapeProgress;
+    serviceProgress = from;
+    await animateService(1500, (t) => {
+      serviceProgress = from * (1 - t);
+    });
     foldman.seekToFraction(0);
     tape.reel_position = 0;
+    serviceProgress = null;
+    service = null;
     void foldman.flushTapeState();
-    foldman.toast('Wound back to the start by hand');
+    touch();
+    foldman.toast('Pencil rewind - back to the start');
   }
 
-  function retension() {
-    if (!tape) return;
-    tape.stretch = Math.max(0, tape.stretch - 0.2);
+  async function retension() {
+    if (!tape || service) return;
+    if (foldman.playing) foldman.pause();
+    service = 'retension';
+    const from = tape.stretch;
+    const to = Math.max(0, from - 0.2);
+    await animateService(1500, (t) => {
+      tape.stretch = from + (to - from) * t;
+    });
+    tape.stretch = to;
+    service = null;
     touch();
-    foldman.toast('Tape re-tensioned');
+    foldman.toast(to === from ? 'Tape already tight - the pencil gave it a nudge' : 'Pencil re-tension - nice and even');
   }
 
   function beginWind(event: PointerEvent) {
-    if (!tape || event.button !== 0) return;
+    if (!tape || service || event.button !== 0) return;
     if (foldman.playing) foldman.pause();
     winding = true;
     windMoved = 0;
@@ -118,6 +162,9 @@
           <div
             class="bench-preview"
             class:winding
+            class:servicing={service !== null}
+            class:service-rewind={service === 'rewind'}
+            class:service-retension={service === 'retension'}
             onpointerdown={beginWind}
             onpointermove={moveWind}
             onpointerup={endWind}
@@ -128,14 +175,21 @@
             <Cassette
               tape={tape}
               side={tape.current_side}
-              progress={foldman.tapeProgress}
+              progress={previewProgress}
               playing={foldman.playing}
             />
+            {#if service}
+              <span class="bench-service" aria-hidden="true">
+                <span class="bench-service-ring"></span>
+                <span class="bench-service-pencil"><i></i></span>
+              </span>
+            {/if}
             {#if winding}
               <span class="bench-pencil" style:left={`${pencil.x}px`} style:top={`${pencil.y}px`}>
                 <Icon name="pencil" size={38} />
               </span>
             {/if}
+            <span class="sr" aria-live="polite">{serviceLabel}</span>
           </div>
 
           <p class="bench-comment">{condition.comment}</p>
@@ -310,15 +364,15 @@
           </div>
 
           <div class="row" style="flex-wrap:wrap;gap:8px;margin-top:12px">
-            <button class="btn small" onclick={wipe}>
+            <button class="btn small" onclick={wipe} disabled={service !== null}>
               <Icon name="sparkle" size={14} />
               Clean the heads
             </button>
-            <button class="btn small" onclick={retension}>
+            <button class="btn small" onclick={() => void retension()} disabled={service !== null}>
               <Icon name="refresh" size={14} />
               Re-tension
             </button>
-            <button class="btn small" onclick={rewind}>
+            <button class="btn small" onclick={() => void rewind()} disabled={service !== null}>
               <Icon name="rew" size={14} />
               Wind to the start
             </button>
