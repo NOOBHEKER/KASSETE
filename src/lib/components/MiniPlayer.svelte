@@ -28,19 +28,16 @@
     </div>
 
     <div class="controls">
-      <button class="icon-btn" onclick={() => foldman.prev()} title="Previous (←)">
-        <Icon name="rew" size={15} />
-      </button>
       <button
-        class="icon-btn play-btn"
-        class:on={foldman.playing}
-        onclick={() => foldman.toggle()}
-        title="Play / pause (Space)"
+        class="icon-btn pencil-btn"
+        onclick={() => {
+          foldman.openSheet('bench');
+          foldman.toast('Drag across the hubs to wind the tape by hand.');
+        }}
+        title="Wind it by hand with a pencil"
       >
-        <Icon name={foldman.playing ? 'pause' : 'play'} size={16} />
-      </button>
-      <button class="icon-btn" onclick={() => foldman.next()} title="Next (→)">
-        <Icon name="ff" size={15} />
+        <Icon name="pencil" size={15} />
+        <span>Wind</span>
       </button>
       <button class="icon-btn flip-btn" onclick={() => foldman.flipSide()} title="Flip the tape (F)">
         <Icon name="flip" size={15} />

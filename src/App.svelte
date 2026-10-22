@@ -58,14 +58,14 @@
       <small>Cassette Deck</small>
     </div>
 
-    <button class="chip chip-btn" class:live={foldman.playing} onclick={() => foldman.openSheet('now')} title="Now playing">
+    <span class="chip" class:live={foldman.playing} title="Tape in the deck">
       {#if foldman.playing}
         <Icon name="play" size={10} />
       {:else}
         <Icon name="stop" size={9} />
       {/if}
       {tapeLabel}
-    </button>
+    </span>
 
     <div class="topbar-spacer"></div>
 
@@ -74,17 +74,11 @@
       <span class="mode-text">{modeLabel}</span>
     </button>
 
-    <button class="icon-btn" onclick={() => foldman.openSheet('now')} title="Now playing (N)">
-      <Icon name="play" size={17} />
-    </button>
     <button class="icon-btn" onclick={() => foldman.openSheet('skins')} title="Skins">
       <Icon name="palette" size={17} />
     </button>
     <button class="icon-btn" onclick={() => foldman.openSheet('jcard')} title="J-card (J)">
       <Icon name="tape" size={17} />
-    </button>
-    <button class="icon-btn" onclick={() => foldman.openSheet('bench')} title="The bench">
-      <Icon name="sparkle" size={17} />
     </button>
     <button class="icon-btn" onclick={() => foldman.openSheet('settings')} title="Settings (S)">
       <Icon name="sliders" size={17} />

@@ -25,6 +25,7 @@
     | 'upload'
     | 'info'
     | 'sparkle'
+    | 'pencil'
     | 'tape';
 
   interface Props {
@@ -124,6 +125,9 @@
     <circle cx="12" cy="8.1" r=".9" fill="currentColor" stroke="none" />
   {:else if name === 'sparkle'}
     <path d="M12 3.5l1.9 5.1 5.1 1.9-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9z" />
+  {:else if name === 'pencil'}
+    <path d="M4 20.2l4.7-.9L19.6 8.4a2.2 2.2 0 0 0-3.1-3.1L5.6 16.2z" />
+    <path d="M14.4 7.1l2.6 2.6" />
     <path d="M18.5 16.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z" />
   {:else if name === 'tape'}
     <rect x="3.2" y="5.6" width="17.6" height="12.8" rx="2.4" />

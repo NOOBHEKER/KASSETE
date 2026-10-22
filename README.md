@@ -15,6 +15,8 @@ Real tapes, real reels, real hiss — built with Tauri, Svelte 5 and a lot of af
 
 ![KASSETE deck](docs/previews/deck.png)
 
+![The Bench - wind, clean and age a tape](docs/previews/bench.png)
+
 KASSETE turns a folder of music into a shelf of cassettes. Every album becomes a tape
 with a hand-written J-card, a shell you can see through, and reels that actually turn.
 Click a tape, press play, and the deck behaves like the real thing — pause lifts the
@@ -28,7 +30,7 @@ It is not a music player with a retro skin. It is a small, complete cassette wor
 
 ### Windows installer (recommended)
 
-1. Grab **`KASSETE_1.0.0_x64-setup.exe`** from the [latest release](https://github.com/NOOBHEKER/KASSETE/releases/latest).
+1. Grab **`KASSETE_1.0.1_x64-setup.exe`** from the [latest release](https://github.com/NOOBHEKER/KASSETE/releases/latest).
 2. Run it. KASSETE installs into your user profile and adds a Desktop and Start Menu
    shortcut — click the cassette icon and it opens, exactly like any other app.
 
@@ -76,16 +78,21 @@ The [docs](docs/) folder is that build, so the demo ships in the repository itse
 - Pause is also eject: the tape stops, lifts, and the drawer of tapes comes up.
 - Auto-reverse at the end of a side, a tape counter, VU meters with needles, and
   reels whose speed eases with the music.
-- Wear, dirt and stretch accumulate as you listen. The **Bench** lets you clean,
-  rewind and restore a tired tape.
+- Wear, dirt and stretch accumulate as you listen. The deck keeps its own counter:
+  every minute on the heads leaves a little more grime, so your most-played tapes
+  go from *Fresh from the shop* to *Played to death* on their own.
+- Open the **Bench** with the pencil at the bottom of the window, then drag across
+  the hubs to wind the tape by hand. Wind too hard and it stretches - the
+  **Bench** also cleans, re-tensions and restores a tired tape.
 
 **Now playing & insight**
 - A full Now Playing screen: big cassette, scrub bar, transport, side queue.
-- Choose a **clear shell** and the deck turns see-through: metal shield, pressure
-  pad, felt spring, pinch roller, capstan, guide posts, slip sheets and erase tab,
-  all visible through the plastic. Press **I** (or the *inside* pill) for the
-  annotated **Inside a cassette** sheet — what every part does, plus your tape's
-  health.
+- Choose a **clear shell** and the deck turns genuinely see-through: metal
+  shield, pressure pad, felt spring, pinch roller, capstan, guide posts, slip
+  sheets and erase tab, all visible through tinted glass. Press **I** (or the
+  *inside* pill) for the annotated **Inside a cassette** sheet - what every part
+  does, plus your tape's health. The **Bench** preview shows the shell you pick
+  before you commit.
 
 **The shelf**
 - Import a folder, a handful of files, or an Android Foldman/KASSETE export.

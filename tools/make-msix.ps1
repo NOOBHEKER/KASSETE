@@ -1,5 +1,5 @@
 <#
-  make-msix.ps1 — wrap the built KASSETE.exe in an MSIX for Microsoft Store.
+  make-msix.ps1 â€” wrap the built KASSETE.exe in an MSIX for Microsoft Store.
 
   Usage:
       powershell -ExecutionPolicy Bypass -File tools\make-msix.ps1
@@ -18,7 +18,7 @@ param(
   [string]$IdentityName = 'Kassete.CassetteDeck',
   [string]$Publisher = 'CN=KASSETE',
   [string]$DisplayName = 'KASSETE',
-  [string]$Version = '1.0.0.0',
+  [string]$Version = '1.0.1.0',
   [string]$Architecture = 'x64'
 )
 

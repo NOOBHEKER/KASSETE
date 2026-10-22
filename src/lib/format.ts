@@ -61,6 +61,64 @@ export function splitSides<T extends { duration_ms?: number }>(tracks: T[]): num
   return Math.ceil(tracks.length / 2);
 }
 
+export interface TapeCondition {
+  /** 0 = fresh, 4 = played to death. */
+  band: number;
+  label: string;
+  comment: string;
+  tone: 'clean' | 'light' | 'loved' | 'worn' | 'dead';
+}
+
+/**
+ * The cosmetic condition of a tape. Wear and dirt are both 0..1 and are
+ * accumulated by the deck as the tape plays; the dirt value wins when it is
+ * clearly the bigger of the two.
+ */
+export function tapeCondition(wear = 0, dirt = 0): TapeCondition {
+  const level = Math.max(wear || 0, dirt || 0);
+  if (dirt >= 0.92) {
+    return { band: 4, label: 'Played to death', comment: '100% dirt left. Rub it off.', tone: 'dead' };
+  }
+  if (level >= 0.78) {
+    return {
+      band: 4,
+      label: 'Played to death',
+      comment: 'Scratched, smudged, and still singing.',
+      tone: 'dead',
+    };
+  }
+  if (level >= 0.55) {
+    return {
+      band: 3,
+      label: 'Well played',
+      comment: 'The label is soft at the edges and the oxide is thinning.',
+      tone: 'worn',
+    };
+  }
+  if (level >= 0.3) {
+    return {
+      band: 2,
+      label: 'A bit loved',
+      comment: 'Fingerprints on the shell, dust in the corners.',
+      tone: 'loved',
+    };
+  }
+  if (level >= 0.1) {
+    return {
+      band: 1,
+      label: 'Barely touched',
+      comment: 'A few plays, a little dust on the label.',
+      tone: 'light',
+    };
+  }
+  return {
+    band: 0,
+    label: 'Fresh from the shop',
+    comment: 'Still smells of shrink-wrap and clean heads.',
+    tone: 'clean',
+  };
+}
+
 export function timeAgoShort(ts: number | null | undefined): string {
   if (!ts) return '';
   const days = Math.floor((Date.now() / 1000 - ts) / 86400);

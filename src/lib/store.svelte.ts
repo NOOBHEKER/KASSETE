@@ -2,7 +2,7 @@ import { listen } from '@tauri-apps/api/event';
 import { api, isTauri, mediaUrl } from './api';
 import { pickAudioFiles, pickFolder } from './dialogs';
 import { applySkin } from './skins';
-import { clamp } from './format';
+import { clamp, tapeCondition } from './format';
 import type { DeckMode, Library, Side, Tape, Track } from './types';
 import { DEMO_LIBRARY } from './demo';
 
@@ -55,6 +55,8 @@ class KASSETEState {
   muted = $state(false);
   ejected = $state(false);
   busy = $state(false);
+  /** Milliseconds of tape actually heard since the app was opened. */
+  sessionPlayMs = $state(0);
 
   viewportWidth = $state(typeof window === 'undefined' ? 1180 : window.innerWidth);
   aspect = $state(typeof window === 'undefined' ? 1.6 : window.innerWidth / window.innerHeight);
@@ -76,6 +78,8 @@ class KASSETEState {
   private triedBlob = false;
   private probed = new Set<string>();
   private countedPlay = false;
+  private lastTickAt = 0;
+  private lastBand = -1;
 
   // ---------------------------------------------------------------- getters --
   get settings() {
@@ -387,11 +391,35 @@ class KASSETEState {
     }
   }
 
+  /**
+   * A tape ages while it is actually running over the heads. The counter is
+   * deliberately generous: a well-loved tape should visibly collect fingerprints
+   * and label foxing after an evening of listening, not after a year.
+   */
+  private ageTape(seconds: number) {
+    const tape = this.tape;
+    if (!tape || seconds <= 0) return;
+    this.sessionPlayMs += seconds * 1000;
+    if (!this.settings.tape_wear_enabled) return;
+
+    tape.wear = clamp(tape.wear + seconds / 10800, 0, 1);
+    tape.dirt = clamp(tape.dirt + seconds / 2700, 0, 1);
+
+    const condition = tapeCondition(tape.wear, tape.dirt);
+    if (condition.band > this.lastBand && condition.band >= 2) {
+      this.toast(condition.comment);
+    }
+    this.lastBand = condition.band;
+  }
+
   private tick() {
     if (!isTauri()) {
       this.demoTick();
       return;
     }
+    const now = performance.now();
+    const elapsed = this.lastTickAt ? Math.min(0.5, (now - this.lastTickAt) / 1000) : 0;
+    this.lastTickAt = now;
     const el = this.audio;
     if (!el) return;
     if (!el.paused) {
@@ -403,6 +431,7 @@ class KASSETEState {
       const targetR = 0.3 + 0.44 * Math.abs(Math.sin(el.currentTime * 0.63 + 0.4)) + Math.random() * 0.16;
       this.vu.l += (Math.min(1, target) - this.vu.l) * 0.35;
       this.vu.r += (Math.min(1, targetR) - this.vu.r) * 0.35;
+      this.ageTape(elapsed);
       this.maybeSaveWhilePlaying();
     } else {
       this.vu.l += (0.05 - this.vu.l) * 0.12;
@@ -418,6 +447,7 @@ class KASSETEState {
       return;
     }
     this.positionMs += 80;
+    this.ageTape(0.08);
     const duration = this.trackDurationMs || 200_000;
     if (this.positionMs >= duration) {
       this.positionMs = duration;
@@ -451,6 +481,10 @@ class KASSETEState {
     this.tapeId = id;
     this.ended = false;
     this.ejected = false;
+    if (changed) {
+      this.countedPlay = false;
+      this.lastBand = tapeCondition(tape.wear, tape.dirt).band;
+    }
 
     if (changed || !restore) {
       const side: Side = restore ? tape.current_side : 'A';
@@ -507,6 +541,10 @@ class KASSETEState {
       this.countedPlay = true;
       tape.play_count += 1;
       tape.last_played_at = Math.floor(Date.now() / 1000);
+      if (this.settings.tape_wear_enabled) {
+        tape.wear = clamp(tape.wear + 0.003, 0, 1);
+        tape.dirt = clamp(tape.dirt + 0.004, 0, 1);
+      }
     }
     this.scheduleSave();
   }

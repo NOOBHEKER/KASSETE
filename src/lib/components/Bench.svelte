@@ -1,10 +1,17 @@
 <script lang="ts">
   import Icon from './Icon.svelte';
+  import Cassette from './Cassette.svelte';
   import { foldman } from '../store.svelte';
   import { LABEL_COLORS, LABEL_STYLES, SHELLS } from '../skins';
-  import { fmtTime, fmtRelative } from '../format';
+  import { clamp, fmtTime, fmtRelative, tapeCondition } from '../format';
 
   const tape = $derived(foldman.tape);
+  const condition = $derived(tape ? tapeCondition(tape.wear, tape.dirt) : tapeCondition());
+
+  let winding = $state(false);
+  let windMoved = $state(0);
+  let pencil = $state({ x: 0, y: 0 });
+  let windStart = { x: 0, progress: 0 };
 
   function touch() {
     if (!tape) return;
@@ -21,8 +28,9 @@
 
   function rewind() {
     if (!tape) return;
+    foldman.seekToFraction(0);
     tape.reel_position = 0;
-    void foldman.patchTapeState({ id: tape.id, reelPosition: 0 });
+    void foldman.flushTapeState();
     foldman.toast('Wound back to the start by hand');
   }
 
@@ -31,6 +39,47 @@
     tape.stretch = Math.max(0, tape.stretch - 0.2);
     touch();
     foldman.toast('Tape re-tensioned');
+  }
+
+  function beginWind(event: PointerEvent) {
+    if (!tape || event.button !== 0) return;
+    if (foldman.playing) foldman.pause();
+    winding = true;
+    windMoved = 0;
+    windStart = { x: event.clientX, progress: foldman.sideProgress };
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    pencil = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+    event.preventDefault();
+  }
+
+  function moveWind(event: PointerEvent) {
+    if (!winding || !tape) return;
+    const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+    pencil = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    const dx = event.clientX - windStart.x;
+    windMoved = Math.max(windMoved, Math.abs(dx));
+    foldman.seekToFraction(clamp(windStart.progress + dx / 380, 0, 0.999));
+  }
+
+  function endWind(event: PointerEvent) {
+    if (!winding || !tape) return;
+    winding = false;
+    const host = event.currentTarget as HTMLElement;
+    if (host.hasPointerCapture(event.pointerId)) host.releasePointerCapture(event.pointerId);
+
+    const over = Math.max(0, windMoved - 180);
+    const added = Math.min(0.22, over * 0.0007);
+    if (added > 0.002 && foldman.settings.tape_stretch_enabled) {
+      tape.stretch = clamp(tape.stretch + added, 0, 1);
+      touch();
+    }
+
+    if (added > 0.012) {
+      foldman.toast('Easy — you stretched the tape a little. Re-tension it on the bench.');
+    } else if (windMoved > 24) {
+      foldman.toast(`Wound by hand — ${condition.label.toLowerCase()}.`);
+    }
   }
 </script>
 
@@ -60,6 +109,41 @@
 
     <div class="sheet-body">
       {#if tape}
+        <div class="section bench-preview-section">
+          <div class="row spread">
+            <h3>On the bench</h3>
+            <span class="condition-tag" data-tone={condition.tone}>{condition.label}</span>
+          </div>
+
+          <div
+            class="bench-preview"
+            class:winding
+            onpointerdown={beginWind}
+            onpointermove={moveWind}
+            onpointerup={endWind}
+            onpointercancel={endWind}
+            role="presentation"
+            title="Drag with the pencil to wind the tape"
+          >
+            <Cassette
+              tape={tape}
+              side={tape.current_side}
+              progress={foldman.tapeProgress}
+              playing={foldman.playing}
+            />
+            {#if winding}
+              <span class="bench-pencil" style:left={`${pencil.x}px`} style:top={`${pencil.y}px`}>
+                <Icon name="pencil" size={38} />
+              </span>
+            {/if}
+          </div>
+
+          <p class="bench-comment">{condition.comment}</p>
+          <p class="hint">
+            Pencil wind: drag across the hubs to pack the tape by hand. Wind too hard and it stretches.
+          </p>
+        </div>
+
         <div class="section">
           <h3>The label</h3>
           <div class="grid-2">
@@ -143,16 +227,27 @@
                   if (!tape) return;
                   tape.shell = shell.id;
                   touch();
+                  if (shell.id === 'C' || shell.id === 'D') {
+                    foldman.toast('Clear shell — the mechanism shows through the plastic.');
+                  }
                 }}
               >
                 {shell.name}
               </button>
             {/each}
           </div>
+          <p class="hint">
+            Frosted blue and Clear are see-through — the mechanism shows through the plastic.
+          </p>
         </div>
 
         <div class="section">
           <h3>Condition</h3>
+          <p class="hint">
+            The deck keeps its own counter. Every minute on the heads adds a little dirt and wear, so
+            your most-played tapes age on their own.
+          </p>
+
           <div class="meter-field">
             <div class="row spread">
               <span>Wear</span>
@@ -170,12 +265,12 @@
               }}
               onchange={touch}
             />
-            <p class="hint">Every play wears the oxide a little. This is cosmetic — nothing is lost.</p>
+            <p class="meter-caption" data-tone={condition.tone}>{condition.label}</p>
           </div>
 
           <div class="meter-field">
             <div class="row spread">
-              <span>Dirt on the heads</span>
+              <span>Dirt &amp; grime</span>
               <b>{Math.round(tape.dirt * 100)}%</b>
             </div>
             <input
@@ -190,6 +285,9 @@
               }}
               onchange={touch}
             />
+            <p class="meter-caption">
+              {tape.dirt >= 0.9 ? '100% dirt left. Rub it off.' : condition.comment}
+            </p>
           </div>
 
           <div class="meter-field">
@@ -232,6 +330,7 @@
           <dl class="stats">
             <div><dt>Plays</dt><dd>{tape.play_count}</dd></div>
             <div><dt>Last played</dt><dd>{fmtRelative(tape.last_played_at)}</dd></div>
+            <div><dt>This session</dt><dd>{fmtTime(foldman.sessionPlayMs)}</dd></div>
             <div><dt>Total runtime</dt><dd>{fmtTime(tape.tracks.reduce((sum, t) => sum + t.duration_ms, 0))}</dd></div>
             <div><dt>Side</dt><dd>{tape.current_side}</dd></div>
           </dl>

@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Side, Tape } from '../types';
   import { foldman } from '../store.svelte';
+  import { tapeCondition } from '../format';
 
   interface Props {
     tape: Tape;
@@ -18,6 +19,8 @@
   const rightFill = $derived(0.54 + 0.4 * progress);
   const labelArtist = $derived(tape.label_artist || tape.artist);
   const labelAlbum = $derived(tape.label_album || tape.album);
+  const condition = $derived(tapeCondition(tape.wear, tape.dirt));
+  const grime = $derived(Math.min(1, Math.pow(Math.max(tape.wear ?? 0, tape.dirt ?? 0), 0.55)));
   const spinState = $derived(playing ? 'running' : 'paused');
   const spinDuration = $derived(`${3.4 - progress * 1.1}s`);
 </script>
@@ -27,8 +30,11 @@
   class:compact
   class:clear
   data-shell={tape.shell}
+  data-condition={condition.tone}
+  title={`${condition.label} — ${condition.comment}`}
   style:--spin-state={spinState}
   style:--spin-duration={spinDuration}
+  style:--grime={grime}
 >
   <span class="screw tl"></span>
   <span class="screw tr"></span>
@@ -103,6 +109,25 @@
     >
       inside
     </button>
+  {/if}
+
+  <div class="cassette-grime" aria-hidden="true">
+    <span class="g-stain s1"></span>
+    <span class="g-stain s2"></span>
+    <span class="g-stain s3"></span>
+    <span class="g-stain s4"></span>
+    <span class="g-print p1"></span>
+    <span class="g-print p2"></span>
+    <span class="g-print p3"></span>
+    <span class="g-scratch"></span>
+    <span class="g-ring"></span>
+    <span class="g-ring r2"></span>
+    <span class="g-dust"></span>
+    <span class="g-label"></span>
+  </div>
+
+  {#if !compact && clear}
+    <div class="cassette-glass" aria-hidden="true"></div>
   {/if}
 
   {#if !compact}

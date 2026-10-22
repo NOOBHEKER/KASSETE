@@ -1,7 +1,7 @@
 [package]
 name = "kassete"
-version = "1.0.0"
-description = "KASSETE — a cassette player for your desktop"
+version = "1.0.1"
+description = "KASSETE â€” a cassette player for your desktop"
 authors = ["kleosal"]
 license = "MIT"
 repository = ""

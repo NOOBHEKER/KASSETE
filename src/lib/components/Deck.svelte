@@ -7,7 +7,7 @@
   import NextLever from './NextLever.svelte';
   import { foldman } from '../store.svelte';
   import { skinById } from '../skins';
-  import { fmtTime } from '../format';
+  import { fmtTime, tapeCondition } from '../format';
 
   const skin = $derived(skinById(foldman.settings.current_skin));
   const tape = $derived(foldman.tape);
@@ -123,6 +123,11 @@
               <Icon name="flip" size={12} />
               Side {foldman.side}
             </span>
+            {#if tape}
+              <span class="condition-pill" data-tone={tapeCondition(tape.wear, tape.dirt).tone}>
+                {tapeCondition(tape.wear, tape.dirt).label}
+              </span>
+            {/if}
             <span class="foot-note">
               {#if tape}
                 {tape.tracks.length} tracks · {tape.year || 'year unknown'}
