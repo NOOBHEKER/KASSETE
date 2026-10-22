@@ -7,7 +7,7 @@
 Real tapes, real reels, real hiss — built with Tauri, Svelte 5 and a lot of affection for 1987.</p>
 
 <p align="center">
-  <a href="../../releases/latest"><img alt="Download" src="https://img.shields.io/badge/download-latest%20release-e0662e?style=flat-square"></a>
+  <a href="https://github.com/NOOBHEKER/KASSETE/releases/latest"><img alt="Download" src="https://img.shields.io/badge/download-latest%20release-e0662e?style=flat-square"></a>
   <img alt="Windows" src="https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-2b2b31?style=flat-square">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-2b2b31?style=flat-square">
   <a href="https://noobheker.github.io/KASSETE/"><img alt="Demo" src="https://img.shields.io/badge/try%20it-in%20your%20browser-4c8fbf?style=flat-square"></a>
@@ -28,7 +28,7 @@ It is not a music player with a retro skin. It is a small, complete cassette wor
 
 ### Windows installer (recommended)
 
-1. Grab **`KASSETE_1.0.0_x64-setup.exe`** from the [latest release](../../releases/latest).
+1. Grab **`KASSETE_1.0.0_x64-setup.exe`** from the [latest release](https://github.com/NOOBHEKER/KASSETE/releases/latest).
 2. Run it. KASSETE installs into your user profile and adds a Desktop and Start Menu
    shortcut — click the cassette icon and it opens, exactly like any other app.
 
