@@ -75,6 +75,27 @@ if (typeof location !== 'undefined' && /[?&](sheet|shell|grime)=/.test(location.
   });
 }
 
+// Dev helper: ?probe=mini reports why the bottom bar is or is not showing.
+if (typeof location !== 'undefined' && location.search.includes('probe=mini')) {
+  setTimeout(() => {
+    void import('./lib/store.svelte').then(({ foldman }) => {
+      const shell = document.querySelector('.app-shell') as HTMLElement | null;
+      const pre = document.createElement('pre');
+      pre.style.cssText =
+        'position:fixed;left:0;top:0;z-index:99999;background:#000;color:#0f0;font:12px/1.4 monospace;padding:8px;white-space:pre-wrap';
+      pre.textContent = [
+        `tapes=${foldman.tapes.length}`,
+        `show_mini=${foldman.settings.show_mini_player}`,
+        `tape=${!!foldman.tape}`,
+        `mode=${foldman.mode}`,
+        `mini=${!!document.querySelector('.mini')}`,
+        `shellH=${shell?.getBoundingClientRect().height} innerH=${window.innerHeight}`,
+      ].join('\n');
+      document.body.appendChild(pre);
+    });
+  }, 1200);
+}
+
 // Dev helper: ?probe=xray prints the geometry of the clear-shell X-ray layer.
 if (typeof location !== 'undefined' && location.search.includes('probe=xray')) {
   setTimeout(() => {

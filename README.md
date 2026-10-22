@@ -122,6 +122,7 @@ Music stays where it is; KASSETE only stores paths and the tape you built around
 | `F` | Flip the tape (side A ↔ B) |
 | `E` | Eject |
 | `I` | Inside a cassette |
+| `B` | The Bench (wind by hand) |
 | `S` | Settings |
 | `Ctrl` + `O` | Add music |
 | `Ctrl` + `B` | Cycle hinge mode |

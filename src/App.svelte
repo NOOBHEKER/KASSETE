@@ -101,7 +101,7 @@
     </div>
   {/if}
 
-  {#if foldman.tapes.length && foldman.settings.show_mini_player && foldman.tape && foldman.mode === 'inner'}
+  {#if foldman.tapes.length && foldman.settings.show_mini_player && foldman.tape}
     <MiniPlayer />
   {/if}
 </div>

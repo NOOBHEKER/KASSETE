@@ -1059,6 +1059,8 @@ class KASSETEState {
         else this.seekBy(-10_000);
       } else if (event.key.toLowerCase() === 'n') {
         this.next();
+      } else if (event.key.toLowerCase() === 'b') {
+        this.sheet = this.sheet === 'bench' ? null : 'bench';
       } else if (event.key.toLowerCase() === 'i') {
         this.openSheet('insights');
       } else if (event.key.toLowerCase() === 'f') {
