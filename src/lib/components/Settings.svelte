@@ -304,7 +304,7 @@
       <div class="section" style="margin-bottom:0">
         <h3>About</h3>
         <p class="hint">
-          KASSETE {info?.version ?? '1.0.0'} · built with Tauri, Svelte and a lot of affection for
+          KASSETE {info?.version ?? '1.0.1'} · built with Tauri, Svelte and a lot of affection for
           plastic. Your music stays on your disk. No accounts, no streaming, no telemetry.
         </p>
       </div>
