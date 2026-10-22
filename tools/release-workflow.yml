@@ -1,0 +1,48 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: ./src-tauri -> target
+
+      - name: Install front-end dependencies
+        run: npm install
+
+      - name: Build and publish
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: 'KASSETE ${{ github.ref_name }}'
+          releaseBody: |
+            **KASSETE** — a cassette deck for your PC.
+
+            Download `KASSETE_*_x64-setup.exe` below, run it, and click the cassette
+            on your Desktop. The portable zip runs without installing anything.
+
+            Your library lives in `%APPDATA%\app.kassete.deck\kassete-library.json`.
+          releaseDraft: true
+          prerelease: false
+          args: -- --jobs 2

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdf8ee"/>
+      <stop offset="1" stop-color="#e9dcc2"/>
+    </linearGradient>
+    <linearGradient id="shell" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#46464f"/>
+      <stop offset="0.5" stop-color="#282830"/>
+      <stop offset="1" stop-color="#141419"/>
+    </linearGradient>
+    <linearGradient id="label" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffdf7"/>
+      <stop offset="1" stop-color="#f1e5cd"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="8" y="8" width="496" height="496" rx="112" fill="url(#bg)"/>
+  <rect x="8" y="8" width="496" height="496" rx="112" fill="none" stroke="#00000016" stroke-width="6"/>
+
+  <!-- cassette shell -->
+  <rect x="70" y="126" width="372" height="260" rx="30" fill="url(#shell)"/>
+  <rect x="70" y="126" width="372" height="260" rx="30" fill="none" stroke="#ffffff30" stroke-width="3"/>
+  <rect x="70" y="126" width="372" height="120" rx="30" fill="#0000002e"/>
+
+  <!-- paper label -->
+  <rect x="96" y="148" width="320" height="102" rx="11" fill="url(#label)"/>
+  <rect x="96" y="148" width="320" height="102" rx="11" fill="none" stroke="#00000012" stroke-width="2"/>
+  <rect x="114" y="168" width="150" height="14" rx="7" fill="#e0662e"/>
+  <rect x="114" y="193" width="94" height="9" rx="4.5" fill="#b9aa8e"/>
+  <rect x="114" y="216" width="248" height="7" rx="3.5" fill="#d5c8ae"/>
+  <rect x="114" y="231" width="176" height="7" rx="3.5" fill="#ded2ba"/>
+
+  <!-- reels -->
+  <circle cx="170" cy="312" r="38" fill="#0c0c10"/>
+  <circle cx="342" cy="312" r="38" fill="#0c0c10"/>
+  <g fill="#f3ead6">
+    <circle cx="170" cy="312" r="24"/>
+    <circle cx="342" cy="312" r="24"/>
+  </g>
+  <g fill="#2b2b33">
+    <rect x="166" y="289" width="8" height="46" rx="4"/>
+    <rect x="147" y="308" width="46" height="8" rx="4"/>
+    <rect x="338" y="289" width="8" height="46" rx="4"/>
+    <rect x="319" y="308" width="46" height="8" rx="4"/>
+  </g>
+
+  <!-- tape ribbon -->
+  <rect x="170" y="307" width="172" height="10" fill="#8a6234"/>
+  <rect x="170" y="307" width="172" height="3.5" fill="#c08d52" opacity="0.7"/>
+
+  <!-- centre window -->
+  <rect x="216" y="292" width="80" height="40" rx="10" fill="#101216" opacity="0.9"/>
+  <rect x="216" y="292" width="80" height="40" rx="10" fill="none" stroke="#ffffff22" stroke-width="2"/>
+  <g fill="#e9e0cb" opacity="0.8">
+    <rect x="230" y="305" width="52" height="5" rx="2.5"/>
+    <rect x="230" y="316" width="52" height="5" rx="2.5"/>
+  </g>
+
+  <!-- head slot -->
+  <rect x="150" y="352" width="212" height="15" rx="7.5" fill="#0a0b0d"/>
+  <rect x="150" y="352" width="212" height="15" rx="7.5" fill="none" stroke="#ffffff14" stroke-width="2"/>
+
+  <!-- screws -->
+  <g fill="#9a948a">
+    <circle cx="96" cy="152" r="6"/>
+    <circle cx="416" cy="152" r="6"/>
+    <circle cx="96" cy="360" r="6"/>
+    <circle cx="416" cy="360" r="6"/>
+  </g>
+</svg>

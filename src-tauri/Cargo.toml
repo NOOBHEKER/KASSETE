@@ -1,0 +1,30 @@
+[package]
+name = "kassete"
+version = "1.0.0"
+description = "KASSETE — a cassette player for your desktop"
+authors = ["kleosal"]
+license = "MIT"
+repository = ""
+edition = "2021"
+rust-version = "1.77"
+
+[lib]
+name = "kassete_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon", "image-png", "protocol-asset"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+walkdir = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-window-state = "2"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

@@ -1,0 +1,35 @@
+{
+  "name": "kassete",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:demo": "vite build --base=./ --outDir docs --emptyOutDir",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
+    "tauri": "tauri",
+    "install:local": "powershell -ExecutionPolicy Bypass -File tools/install-local.ps1 -Launch",
+    "msix": "powershell -ExecutionPolicy Bypass -File tools/make-msix.ps1"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.3",
+    "@tsconfig/svelte": "^5.0.8",
+    "@types/node": "^24.19.2",
+    "autoprefixer": "^10.6.1",
+    "postcss": "^8.5.31",
+    "svelte": "^5.57.2",
+    "svelte-check": "^4.7.7",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.3",
+    "vite": "^8.3.4"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.12.4",
+    "@tauri-apps/plugin-dialog": "^2.8.3"
+  },
+  "description": "KASSETE - a cassette deck for your PC. Real tapes, real reels, real hiss."
+}
